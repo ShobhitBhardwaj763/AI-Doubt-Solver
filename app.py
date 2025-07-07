@@ -60,7 +60,6 @@ if question := st.chat_input("Ask your doubt here..."):
         db.collection("doubts").add({
             "question": question,
             "answer": response.text,
-            "user" : "anonymous",
         })       
 
 
