@@ -5,6 +5,7 @@ import google.generativeai as genai
 import firebase_admin 
 from firebase_admin import credentials, firestore
 from firebase_admin import auth
+import json
 
 
 
@@ -69,7 +70,8 @@ if question := st.chat_input("Ask your doubt here..."):
 
 #Firebase Setup
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase_key.json")
+    cred_dict = json.loads(st.secrets["FIREBASE_CREDS"])
+    cred = credentials.Certificate(cred_dict)
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
