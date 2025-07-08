@@ -64,7 +64,6 @@ with st.chat_message("assistant"):
         db.collection("doubts").add({
             "question": question,
             "answer": response.text,
-            "timestamp": firestore.SERVER_TIMESTAMP  # Optional: add time
         })
 
 
