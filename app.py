@@ -60,19 +60,12 @@ with st.chat_message("assistant"):
         })
 
         # ✅ Store question & answer in Firebase
+        db = firestore.client()
         db.collection("doubts").add({
             "question": question,
             "answer": response.text,
             "timestamp": firestore.SERVER_TIMESTAMP  # Optional: add time
         })
-
-
-
-
-  
-
-
-
 
 
 st.write("Reading Firebase credentials...")
@@ -83,17 +76,6 @@ except Exception as e:
     st.error(f"Secret loading failed: {e}")
 
 
- #save to firebase
-db = firestore.client()  
-db.collection("doubts").add({
-    "question": question,
-    "answer": response.text,
-        })       
-
-
-
-    
-    
 
 #Firebase Setup
 if not firebase_admin._apps:
