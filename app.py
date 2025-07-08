@@ -54,6 +54,12 @@ if question := st.chat_input("Ask your doubt here..."):
 
 
 
+st.write("Reading Firebase credentials...")
+try:
+    cred_dict = json.loads(st.secrets["FIREBASE_CREDS"])
+    st.success("Secret loaded correctly")
+except Exception as e:
+    st.error(f"Secret loading failed: {e}")
 
 
  #save to firebase
