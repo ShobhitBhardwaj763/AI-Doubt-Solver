@@ -1,3 +1,4 @@
+import json
 import streamlit as st
 import os
 from dotenv import load_dotenv
@@ -5,7 +6,7 @@ import google.generativeai as genai
 import firebase_admin 
 from firebase_admin import credentials, firestore
 from firebase_admin import auth
-import json
+
 
 
 
@@ -37,34 +38,38 @@ st.write("Ask me any question, and I’ll help you understand it better!")
 genai.configure(api_key=api_key)
 
 # Ask user for a qustion
-# User input box
-if question := st.chat_input("Ask your doubt here..."):
-    # Display user message
+# Get user question
+question = st.chat_input("Ask your doubt here...")
+
+if question:
+    # Add user message to chat
     st.chat_message("user").markdown(question)
     st.session_state.messages.append({"role": "user", "content": question})
 
-# Generate AI response
-with st.chat_message("assistant"):
-    with st.spinner("Thinking..."):
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        prompt = f"You are an AI Doubt Solver and tutor, explain doubts in simple and short "
-        response = model.generate_content(prompt)
+    # Generate AI response
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            
+            # Include the user's question in the prompt
+            prompt = f"You are an AI Doubt Solver and tutor. Explain the following doubt in a simple and short way:\n\n{question}"
+            response = model.generate_content(prompt)
 
-        # Show answer to user
-        st.markdown(response.text)
+            # Show answer to user
+            st.markdown(response.text)
 
-        # Store in chat history
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": response.text
-        })
+            # Store in chat history
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": response.text
+            })
 
-        # ✅ Store question & answer in Firebase
-        db = firestore.client()
-        db.collection("doubts").add({
-            "question": question,
-            "answer": response.text,
-        })
+            # ✅ Store question & answer in Firebase
+            db = firestore.client()
+            db.collection("doubts").add({
+                "question": question,
+                "answer": response.text,
+            })
 
 
 #Firebase Setup
