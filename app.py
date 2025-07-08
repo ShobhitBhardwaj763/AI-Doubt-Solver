@@ -43,19 +43,31 @@ if question := st.chat_input("Ask your doubt here..."):
     st.chat_message("user").markdown(question)
     st.session_state.messages.append({"role": "user", "content": question})
 
-#Generate AI response
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            prompt = f"Answer in a simple and clear way:\n\n{question}"
-            response = model.generate_content(prompt)
-            st.markdown(response.text)
-            st.session_state.messages.append({"role": "assistant", "content": response.text})
-             db = firestore.client()  
-            db.collection("doubts").add({
-                "question": question,
-                "answer": response.text,
-            })       
+# Generate AI response
+with st.chat_message("assistant"):
+    with st.spinner("Thinking..."):
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        prompt = f"Answer in a simple and clear way:\n\n{question}"
+        response = model.generate_content(prompt)
+
+        # Show answer to user
+        st.markdown(response.text)
+
+        # Store in chat history
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": response.text
+        })
+
+        # ✅ Store question & answer in Firebase
+        db.collection("doubts").add({
+            "question": question,
+            "answer": response.text,
+            "timestamp": firestore.SERVER_TIMESTAMP  # Optional: add time
+        })
+
+
+
 
   
 
