@@ -63,10 +63,10 @@ except Exception as e:
 
 
  #save to firebase
-        db = firestore.client()  
-        db.collection("doubts").add({
-            "question": question,
-            "answer": response.text,
+db = firestore.client()  
+db.collection("doubts").add({
+    "question": question,
+    "answer": response.text,
         })       
 
 
