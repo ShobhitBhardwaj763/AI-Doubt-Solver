@@ -46,29 +46,26 @@ if question:
     st.chat_message("user").markdown(question)
     st.session_state.messages.append({"role": "user", "content": question})
 
-    # Generate AI response
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            
-            # Include the user's question in the prompt
-            prompt = f"You are an AI Doubt Solver and tutor. Explain the following doubt in a simple and short way:\n\n{question}"
-            response = model.generate_content(prompt)
+  # Generate AI response
+with st.chat_message("assistant"):
+    with st.spinner("Thinking..."):
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        prompt = f"You are an AI Doubt Solver and tutor. Explain the following doubt in a simple and short way:\n\n{question}"
+        response = model.generate_content(prompt)
 
-            # Show answer to user
-            st.markdown(response.text)
+    # ✅ OUTSIDE the spinner now
+    st.markdown(response.text)
 
-            # Store in chat history
-            st.session_state.messages.append({
-                "role": "assistant",
-                "content": response.text
-            })
+    st.session_state.messages.append({
+        "role": "assistant",
+        "content": response.text
+    })
 
-            # ✅ Store question & answer in Firebase
-            db = firestore.client()
-            db.collection("doubts").add({
-                "question": question,
-                "answer": response.text,
+    # ✅ Store question & answer in Firebase
+    db = firestore.client()
+    db.collection("doubts").add({
+        "question": question,
+        "answer": response.text,
             })
 
 
