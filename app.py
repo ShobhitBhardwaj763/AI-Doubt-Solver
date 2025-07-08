@@ -67,15 +67,6 @@ with st.chat_message("assistant"):
         })
 
 
-st.write("Reading Firebase credentials...")
-try:
-    cred_dict = json.loads(st.secrets["FIREBASE_CREDS"])
-    st.success("Secret loaded correctly")
-except Exception as e:
-    st.error(f"Secret loading failed: {e}")
-
-
-
 #Firebase Setup
 if not firebase_admin._apps:
     cred_dict = json.loads(st.secrets["FIREBASE_CREDS"])
@@ -83,6 +74,15 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+
+
+st.write("Reading Firebase credentials...")
+try:
+    cred_dict = json.loads(st.secrets["FIREBASE_CREDS"])
+    st.success("Secret loaded correctly")
+except Exception as e:
+    st.error(f"Secret loading failed: {e}")
+
 
 
 
