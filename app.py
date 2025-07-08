@@ -51,6 +51,15 @@ if question := st.chat_input("Ask your doubt here..."):
             response = model.generate_content(prompt)
             st.markdown(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
+             db = firestore.client()  
+            db.collection("doubts").add({
+                "question": question,
+                "answer": response.text,
+            })       
+
+  
+
+
 
 
 
