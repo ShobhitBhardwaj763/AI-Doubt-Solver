@@ -47,7 +47,7 @@ if question := st.chat_input("Ask your doubt here..."):
 with st.chat_message("assistant"):
     with st.spinner("Thinking..."):
         model = genai.GenerativeModel("gemini-1.5-flash")
-        prompt = f"Answer in a simple and clear way:\n\n{question}"
+        prompt = f"You are an AI Doubt Solver and tutor, explain doubts in simple and short "
         response = model.generate_content(prompt)
 
         # Show answer to user
